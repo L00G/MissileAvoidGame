@@ -24,22 +24,22 @@ namespace MissileAvoidGame
         private double m_x, m_y;
         public Player()
         {
-            m_x = 200;
-            m_y = 200;
+            
             m_character = new Rectangle();
             m_character.Width = 15;
             m_character.Height = 15;
             m_character.Stroke = System.Windows.Media.Brushes.BlanchedAlmond;
             m_character.StrokeThickness = 2;
-            Canvas.SetTop(m_character, m_y-10);
-            Canvas.SetLeft(m_character,m_x-10);
+
+            m_x = m_y = 200;
+            m_character.SetValue(Canvas.TopProperty, m_y - 10);
+            m_character.SetValue(Canvas.LeftProperty, m_x - 10);
         }
 
         public Rectangle GetPlayerCharacter()
         {
             return m_character;
         }
-
         public Point GetPlayerPosition()
         {
             return new Point(m_x, m_y);
@@ -49,7 +49,6 @@ namespace MissileAvoidGame
         {
             m_moveFlag = m_moveFlag | flag;
         }
-
         public void RemoveDirection(int flag)
         {
             if((m_moveFlag&flag)==flag)
@@ -66,21 +65,15 @@ namespace MissileAvoidGame
         {
             double dx = 0, dy = 0;
             if ((m_moveFlag&(int)MoveDirection.Up)== (int)MoveDirection.Up)
-            {
                 dy = - m_speed;
-            }
             else if ((m_moveFlag & (int)MoveDirection.Down) == (int)MoveDirection.Down)
-            {
                 dy = + m_speed;
-            }
+
             if ((m_moveFlag & (int)MoveDirection.Left) == (int)MoveDirection.Left)
-            {
                 dx = - m_speed;
-            }
             else if ((m_moveFlag & (int)MoveDirection.Right) == (int)MoveDirection.Right)
-            {
                 dx = + m_speed;
-            }
+
             double r = Math.Sqrt(Math.Pow(dx, 2) + Math.Pow(dy, 2));
             double fr = r / m_speed;
 
@@ -88,10 +81,12 @@ namespace MissileAvoidGame
             {
                 m_x += dx / fr;
                 m_y += dy / fr;
-            }
-            Canvas.SetTop(m_character, m_y - 10);
-            Canvas.SetLeft(m_character, m_x - 10);
-
+            }         
+        }
+        public void Render()
+        {
+            m_character.SetValue(Canvas.TopProperty, m_y - 10);
+            m_character.SetValue(Canvas.LeftProperty, m_x - 10);
         }
     }
 }

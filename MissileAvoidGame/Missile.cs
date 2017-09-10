@@ -15,7 +15,7 @@ namespace MissileAvoidGame
 
         protected Ellipse m_missile;
         protected double m_nowX, m_nowY;
-        protected double m_dx, m_dy;
+        protected double m_dirX, m_dirY;
         protected double m_speed;
         protected int m_radius;
 
@@ -28,47 +28,40 @@ namespace MissileAvoidGame
             m_missile.Height = m_radius;
         }
 
-        public virtual void Move() { }
-        public virtual void Update() { }
         public virtual void Initialize()
         {
             m_speed = c_rand.NextDouble() * 2 + 0.3;
             double direction = c_rand.NextDouble();
+            m_nowX = m_nowY = (direction > 0.5) ? 0 : 500;
             if (direction > 0.75)
-            {
-                m_nowY = 0;
                 m_nowX = c_rand.Next(500);
-            }
             else if (direction > 0.50)
-            {
                 m_nowY = c_rand.Next(500);
-                m_nowX = 500;
-            }
             else if (direction > 0.25)
-            {
-                m_nowY = 500;
                 m_nowX = c_rand.Next(500);
-            }
             else
-            {
                 m_nowY = c_rand.Next(500);
-                m_nowX = 0;
-            }
-
-            Canvas.SetTop(m_missile, m_nowY);
-            Canvas.SetLeft(m_missile, m_nowX);
         }
-
-        public Point GetCenter()
+        public void Move()
+        {
+            m_nowX += m_dirX;
+            m_nowY += m_dirY;
+        }
+        public void Render()
+        {
+            Canvas.SetTop(m_missile, m_nowY - m_radius / 2);
+            Canvas.SetLeft(m_missile, m_nowX - m_radius / 2);
+        }
+        public virtual void Update() { }
+        
+        public Point GetObjectPosition()
         {
             return new Point(m_nowX, m_nowY);
         }
-
         public Ellipse GetMissileObject()
         {
             return m_missile;
         }
-
         public bool IsOnView()
         {
             if (500 < m_nowX || m_nowX < 0 || 500 < m_nowY || m_nowY<0)

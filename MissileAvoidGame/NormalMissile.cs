@@ -11,33 +11,25 @@ namespace MissileAvoidGame
     {
         public NormalMissile() : base()
         {
-            
+            m_missile.Stroke = System.Windows.Media.Brushes.Chocolate;
+            m_missile.Fill = System.Windows.Media.Brushes.Chocolate;
         }
+
         public override void Initialize()
         {
             base.Initialize();
-            m_missile.Stroke = System.Windows.Media.Brushes.Chocolate;
-            m_missile.Fill = System.Windows.Media.Brushes.Chocolate;
-
+         
             double dstX = c_rand.Next(100) + 200;
             double dstY = c_rand.Next(100) + 200;
 
-            m_dx = dstX - m_nowX;
-            m_dy = dstY - m_nowY;
+            m_dirX = dstX - m_nowX;
+            m_dirY = dstY - m_nowY;
 
-            double r = Math.Sqrt(Math.Pow(m_dx, 2) + Math.Pow(m_dy, 2));
+            double r = Math.Sqrt(Math.Pow(m_dirX, 2) + Math.Pow(m_dirY, 2));
             double fr = r / m_speed;
 
-            m_dy = m_dy / fr;
-            m_dx = m_dx / fr;
-        }
-        public override void Move()
-        {
-            m_nowX += m_dx;
-            m_nowY += m_dy;
-
-            Canvas.SetTop(m_missile, m_nowY - m_radius / 2);
-            Canvas.SetLeft(m_missile, m_nowX - m_radius / 2);
+            m_dirY = m_dirY / fr;
+            m_dirX = m_dirX / fr;
         }
         public override void Update()
         {
