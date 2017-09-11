@@ -31,26 +31,16 @@ namespace MissileAvoidGame
         {
             InitializeComponent();
 
-            rootCanvas = new Canvas();
-            rootCanvas.Height = 500;
-            rootCanvas.Width = 500;
-            rootCanvas.Background = new SolidColorBrush(Colors.AliceBlue); 
-            rootCanvas.HorizontalAlignment = HorizontalAlignment.Center;
-            rootCanvas.VerticalAlignment = VerticalAlignment.Center;
-            rootCanvas.Children.Add(oPlayer.GetPlayerCharacter());
-
-            oMissile = new List<Missile>();
-
-            for (int i = 0; i < 50; i++)
+            rootCanvas = new Canvas
             {
-                NormalMissile missile = new NormalMissile();
-                missile.Initialize();
-                rootCanvas.Children.Add(missile.GetMissileObject());
-                oMissile.Add(missile);
-            }
+                Height = 500,
+                Width = 500,
+                Background = new SolidColorBrush(Colors.AliceBlue),
+                HorizontalAlignment = HorizontalAlignment.Center,
+                VerticalAlignment = VerticalAlignment.Center
+            };
 
-            this.PreviewKeyUp += EventKeyUp;
-            this.PreviewKeyDown += EventKeyDown;
+            Initialize();
 
             gameLoopTimer = new DispatcherTimer();
             gameLoopTimer.Tick += GameLoop;
@@ -62,12 +52,39 @@ namespace MissileAvoidGame
             addMissileTimer.Interval = TimeSpan.FromSeconds(1);
             addMissileTimer.Start();
 
-            this.Width = 600;
-            this.Height = 600;
+            PreviewKeyUp += EventKeyUp;
+            PreviewKeyDown += EventKeyDown;
 
-            this.Content = rootCanvas;
+            Width = 600;
+            Height = 600;
+
+            Content = rootCanvas;
         }
       
+        public void Initialize()
+        {
+            rootCanvas.Children.Clear();
+           
+            if (oPlayer == null)
+                oPlayer = new Player();
+            oPlayer.Initialize();
+
+            rootCanvas.Children.Add(oPlayer.GetPlayerCharacter());
+            
+            if (oMissile == null)
+                oMissile = new List<Missile>();
+            else
+                oMissile.Clear();
+
+            for (int i = 0; i < 50; i++)
+            {
+                NormalMissile missile = new NormalMissile();
+                missile.Initialize();
+                rootCanvas.Children.Add(missile.GetMissileObject());
+                oMissile.Add(missile);
+            }
+            misiilleCount = 50;
+        }
         public void Update()
         {
             oPlayer.Move();
@@ -80,8 +97,11 @@ namespace MissileAvoidGame
                     missile.Initialize();
                 if (oPlayer.IsCollisionObject(missile.GetObjectPosition()))
                 {
-                    gameLoopTimer.Stop();
-                    addMissileTimer.Stop();
+                    MessageBoxResult result = MessageBox.Show("are you ready?", "replay?", MessageBoxButton.YesNo);
+                    if (result == MessageBoxResult.Yes)
+                        Initialize();
+                    else if (result == MessageBoxResult.No)
+                        Close();
                 }
             }
         }

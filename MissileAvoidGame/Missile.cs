@@ -22,10 +22,12 @@ namespace MissileAvoidGame
         public Missile()
         {
             m_radius = 4;
-            m_missile = new Ellipse();    
-            m_missile.StrokeThickness = 2;      
-            m_missile.Width = m_radius;
-            m_missile.Height = m_radius;
+            m_missile = new Ellipse
+            {
+                StrokeThickness = 2,
+                Width = m_radius,
+                Height = m_radius
+            };
         }
 
         public virtual void Initialize()

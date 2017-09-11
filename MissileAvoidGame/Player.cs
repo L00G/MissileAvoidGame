@@ -19,21 +19,18 @@ namespace MissileAvoidGame
     class Player
     {
         private Rectangle m_character;
-        private int m_speed = 4;
-        private int m_moveFlag=0;
+        private int m_speed;
+        private int m_moveFlag;
         private double m_x, m_y;
         public Player()
         {
-            
-            m_character = new Rectangle();
-            m_character.Width = 15;
-            m_character.Height = 15;
-            m_character.Stroke = System.Windows.Media.Brushes.BlanchedAlmond;
-            m_character.StrokeThickness = 2;
-
-            m_x = m_y = 200;
-            m_character.SetValue(Canvas.TopProperty, m_y - 10);
-            m_character.SetValue(Canvas.LeftProperty, m_x - 10);
+            m_character = new Rectangle
+            {
+                Width = 15,
+                Height = 15,
+                Stroke = System.Windows.Media.Brushes.BlanchedAlmond,
+                StrokeThickness = 2
+            };      
         }
 
         public Rectangle GetPlayerCharacter()
@@ -60,6 +57,15 @@ namespace MissileAvoidGame
             if (Math.Abs(m_x - center.X) < 6 && Math.Abs(m_y - center.Y) < 6)
                 return true;
             return false;
+        }
+
+        public void Initialize()
+        {
+            m_speed = 4;
+            m_moveFlag = 0;
+            m_x = m_y = 250;
+            m_character.SetValue(Canvas.TopProperty, m_y - 10);
+            m_character.SetValue(Canvas.LeftProperty, m_x - 10);
         }
         public void Move()
         {

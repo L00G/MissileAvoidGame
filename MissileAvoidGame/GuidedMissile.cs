@@ -22,7 +22,6 @@ namespace MissileAvoidGame
         {
             m_missile.Stroke = System.Windows.Media.Brushes.CadetBlue;
             m_missile.Fill = System.Windows.Media.Brushes.CadetBlue;
-
         }
 
         public override void Initialize()
