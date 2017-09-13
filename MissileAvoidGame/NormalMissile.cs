@@ -19,11 +19,11 @@ namespace MissileAvoidGame
         {
             base.Initialize();
          
-            double dstX = c_rand.Next(100) + 200;
-            double dstY = c_rand.Next(100) + 200;
+            double dstX = rand.Next(100) + 200;
+            double dstY = rand.Next(100) + 200;
 
-            m_dirX = dstX - m_nowX;
-            m_dirY = dstY - m_nowY;
+            m_dirX = dstX - m_x;
+            m_dirY = dstY - m_y;
 
             double r = Math.Sqrt(Math.Pow(m_dirX, 2) + Math.Pow(m_dirY, 2));
             double fr = r / m_speed;
@@ -34,6 +34,8 @@ namespace MissileAvoidGame
         public override void Update()
         {
             Move();
+            if (500 < m_x || m_x < 0 || 500 < m_y || m_y < 0)
+                Initialize();
         }
     }
 }

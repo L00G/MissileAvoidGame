@@ -16,27 +16,24 @@ namespace MissileAvoidGame
         Right = 8
     }
 
-    class Player
+    class Player : Object
     {
         private Rectangle m_character;
         private int m_speed;
         private int m_moveFlag;
-        private double m_x, m_y;
+
         public Player()
         {
+            m_size = 15;
             m_character = new Rectangle
             {
-                Width = 15,
-                Height = 15,
+                Width = m_size,
+                Height = m_size,
                 Stroke = System.Windows.Media.Brushes.BlanchedAlmond,
                 StrokeThickness = 2
             };      
         }
 
-        public Rectangle GetPlayerCharacter()
-        {
-            return m_character;
-        }
         public Point GetPlayerPosition()
         {
             return new Point(m_x, m_y);
@@ -52,14 +49,7 @@ namespace MissileAvoidGame
                 m_moveFlag = m_moveFlag - flag;
         }
 
-        public bool IsCollisionObject(Point center)
-        {
-            if (Math.Abs(m_x - center.X) < 6 && Math.Abs(m_y - center.Y) < 6)
-                return true;
-            return false;
-        }
-
-        public void Initialize()
+        public override void Initialize()
         {
             m_speed = 4;
             m_moveFlag = 0;
@@ -67,7 +57,7 @@ namespace MissileAvoidGame
             m_character.SetValue(Canvas.TopProperty, m_y - 10);
             m_character.SetValue(Canvas.LeftProperty, m_x - 10);
         }
-        public void Move()
+        public override void Move()
         {
             double dx = 0, dy = 0;
             if ((m_moveFlag&(int)MoveDirection.Up)== (int)MoveDirection.Up)
@@ -89,10 +79,15 @@ namespace MissileAvoidGame
                 m_y += dy / fr;
             }         
         }
-        public void Render()
+        public override void Render()
         {
             m_character.SetValue(Canvas.TopProperty, m_y - 10);
             m_character.SetValue(Canvas.LeftProperty, m_x - 10);
+        }
+        public override void Update() { }
+        public override Shape GetObject()
+        {
+            return m_character;
         }
     }
 }

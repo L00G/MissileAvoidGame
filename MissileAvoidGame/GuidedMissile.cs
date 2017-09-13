@@ -23,20 +23,14 @@ namespace MissileAvoidGame
             m_missile.Stroke = System.Windows.Media.Brushes.CadetBlue;
             m_missile.Fill = System.Windows.Media.Brushes.CadetBlue;
         }
-
-        public override void Initialize()
-        {
-            base.Initialize();
-   
-            m_maxSpeed = m_speed;
-        }
+      
         public void SetTarget(Player player)
         {
             m_target = player;
             m_dstX = m_target.GetPlayerPosition().X;
             m_dstY = m_target.GetPlayerPosition().Y;
 
-            m_degree = Math.Atan2(m_dstY - m_nowY, m_dstX - m_nowX) * 180 / Math.PI;
+            m_degree = Math.Atan2(m_dstY - m_y, m_dstX - m_x) * 180 / Math.PI;
             m_dirX = Math.Cos(m_degree / 180 * Math.PI) * m_speed;
             m_dirY = Math.Sin(m_degree / 180 * Math.PI) * m_speed;
 
@@ -49,7 +43,7 @@ namespace MissileAvoidGame
             m_dstX = m_target.GetPlayerPosition().X;
             m_dstY = m_target.GetPlayerPosition().Y;
 
-            m_dstDegree = Math.Atan2(m_dstY - m_nowY, m_dstX - m_nowX) * 180 / Math.PI;
+            m_dstDegree = Math.Atan2(m_dstY - m_y, m_dstX - m_x) * 180 / Math.PI;
             m_dstDegree = (int)m_dstDegree;
 
         }
@@ -91,7 +85,7 @@ namespace MissileAvoidGame
                 m_dirX = Math.Cos(m_degree / 180 * Math.PI) * m_speed;
                 m_dirY = Math.Sin(m_degree / 180 * Math.PI) * m_speed;
 
-                m_dstDegree = Math.Atan2(m_dstY - m_nowY, m_dstX - m_nowX) * 180 / Math.PI;
+                m_dstDegree = Math.Atan2(m_dstY - m_y, m_dstX - m_x) * 180 / Math.PI;
                 m_dstDegree = (int)m_dstDegree;
             }
             else
@@ -103,6 +97,12 @@ namespace MissileAvoidGame
             }
         }
 
+        public override void Initialize()
+        {
+            base.Initialize();
+
+            m_maxSpeed = m_speed;
+        }
         public override void Update()
         {
             m_tick++;
@@ -113,6 +113,8 @@ namespace MissileAvoidGame
             }
             Rotate();
             Move();
+            if (500 < m_x || m_x < 0 || 500 < m_y || m_y < 0)
+                Initialize();
         }
     }
 }

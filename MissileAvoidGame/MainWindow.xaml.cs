@@ -23,7 +23,7 @@ namespace MissileAvoidGame
     {
 
         Player oPlayer = new Player();
-        List<Missile> oMissile;
+        List<Object> oMissile;
         Canvas rootCanvas;
         DispatcherTimer gameLoopTimer,addMissileTimer;
         private int misiilleCount;
@@ -69,10 +69,10 @@ namespace MissileAvoidGame
                 oPlayer = new Player();
             oPlayer.Initialize();
 
-            rootCanvas.Children.Add(oPlayer.GetPlayerCharacter());
+            rootCanvas.Children.Add(oPlayer.GetObject());
             
             if (oMissile == null)
-                oMissile = new List<Missile>();
+                oMissile = new List<Object>();
             else
                 oMissile.Clear();
 
@@ -80,7 +80,7 @@ namespace MissileAvoidGame
             {
                 NormalMissile missile = new NormalMissile();
                 missile.Initialize();
-                rootCanvas.Children.Add(missile.GetMissileObject());
+                rootCanvas.Children.Add(missile.GetObject());
                 oMissile.Add(missile);
             }
             misiilleCount = 50;
@@ -91,15 +91,16 @@ namespace MissileAvoidGame
 
             for (int i = 0; i < oMissile.Count; i++)
             {
-                Missile missile = oMissile.ElementAt(i);
+                Object missile = oMissile.ElementAt(i);
                 missile.Update();
-                if (!missile.IsOnView())
-                    missile.Initialize();
-                if (oPlayer.IsCollisionObject(missile.GetObjectPosition()))
+                if (missile.IsCollisionObj(oPlayer))
                 {
                     MessageBoxResult result = MessageBox.Show("are you ready?", "replay?", MessageBoxButton.YesNo);
                     if (result == MessageBoxResult.Yes)
+                    {
                         Initialize();
+                        break;
+                    }
                     else if (result == MessageBoxResult.No)
                         Close();
                 }
@@ -111,7 +112,7 @@ namespace MissileAvoidGame
 
             for (int i = 0; i < oMissile.Count; i++)
             {
-                Missile temp = oMissile.ElementAt(i);
+                Object temp = oMissile.ElementAt(i);
                 temp.Render();
             }
         }
@@ -122,19 +123,26 @@ namespace MissileAvoidGame
         }
         public void AddMissile(object sender, EventArgs e)
         {
-            Missile missile;
-            if (++misiilleCount % 5 == 0)
+            Object missile;
+            misiilleCount++;
+            if (misiilleCount % 5 == 0)
             {
                 missile = new GuidedMissile();
                 ((GuidedMissile)missile).SetTarget(oPlayer);
             }
             else
                 missile = new NormalMissile();
+
+            if (misiilleCount % 10 == 0)
+            {
+                missile = new Bomb();
+            }
+            
             missile.Initialize();
             missile.Render();
 
             oMissile.Add(missile);
-            rootCanvas.Children.Add(missile.GetMissileObject());
+            rootCanvas.Children.Add(missile.GetObject());
         }
 
         private void EventKeyUp(object sender, KeyEventArgs e)
